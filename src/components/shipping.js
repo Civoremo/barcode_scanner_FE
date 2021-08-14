@@ -1,8 +1,8 @@
 /** @format */
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import QrReader from "react-qr-reader";
-import ReadQR from "react-qr-barcode-scanner";
+// import ReadQR from "react-qr-barcode-scanner";
 
 const Shipping = () => {
   const [readQRcode, setReadQRcode] = useState(null);
