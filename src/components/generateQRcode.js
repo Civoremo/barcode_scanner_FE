@@ -11,7 +11,7 @@ const GenerateQRcode = () => {
     e.preventDefault();
     QRcode.toDataURL(textForQRgenerate)
       .then(result => {
-        console.log(result);
+        console.log("qr result", result);
         setgeneratedQR(result);
       })
       .catch(err => {
