@@ -7,7 +7,7 @@ const Orders = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:4000/QR/orders/all`,
+      url: `${process.env.REACT_APP_REMOTE_API_URL}QR/orders/all`,
       responseType: "json",
     })
       .then(result => {

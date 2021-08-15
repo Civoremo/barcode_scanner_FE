@@ -14,7 +14,7 @@ const Shipping = () => {
 
     axios({
       method: "post",
-      url: `http://localhost:4000/QR/shipping`,
+      url: `${process.env.REACT_APP_REMOTE_API_URL}QR/shipping`,
       data: readQRcode,
       responseType: "json",
     })
