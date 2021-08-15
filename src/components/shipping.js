@@ -1,5 +1,6 @@
 /** @format */
 
+import axios from "axios";
 import React, { useState } from "react";
 import QrReader from "react-qr-reader";
 // import ReadQR from "react-qr-barcode-scanner";
@@ -7,6 +8,25 @@ import QrReader from "react-qr-reader";
 const Shipping = () => {
   const [readQRcode, setReadQRcode] = useState(null);
   //   const qrReaderRef = useRef(null);
+
+  const sendShippingOrder = e => {
+    e.preventDefault();
+
+    axios({
+      method: "post",
+      url: `http://localhost:4000/QR/shipping`,
+      data: readQRcode,
+      responseType: "json",
+    })
+      .then(result => {
+        console.log("shipping post result", result);
+        setReadQRcode(null);
+      })
+      .catch(err => {
+        console.log("shipping post failed", err);
+        setReadQRcode(null);
+      });
+  };
 
   const handleScanError = error => {
     console.log("scan error", error);
@@ -17,6 +37,11 @@ const Shipping = () => {
       //   console.log("scan result", scan);
       setReadQRcode(scan);
     }
+  };
+
+  const cancelShipping = e => {
+    e.preventDefault();
+    setReadQRcode(null);
   };
 
   return (
@@ -33,8 +58,8 @@ const Shipping = () => {
       />
       <div>{"Scanned QR: " + readQRcode}</div>
       <div style={{ display: readQRcode ? "block" : "none" }}>
-        <button>Accept</button>
-        <button>Cancel</button>
+        <button onClick={event => sendShippingOrder(event)}>Accept</button>
+        <button onClick={event => cancelShipping(event)}>Cancel</button>
       </div>
     </div>
   );
