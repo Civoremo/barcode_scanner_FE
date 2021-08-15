@@ -15,7 +15,7 @@ const Shipping = () => {
     axios({
       method: "post",
       url: `${process.env.REACT_APP_REMOTE_API_URL}QR/shipping`,
-      data: readQRcode,
+      data: { orderDetails: readQRcode },
       responseType: "json",
     })
       .then(result => {
@@ -46,7 +46,7 @@ const Shipping = () => {
 
   return (
     <div>
-      <div>shipping scanner component</div>
+      <h3>SHIPPING SCANNER</h3>
       <QrReader
         // ref={qrReaderRef}
         delay={300}
@@ -58,7 +58,7 @@ const Shipping = () => {
       />
       <div>{"Scanned QR: " + readQRcode}</div>
       <div style={{ display: readQRcode ? "block" : "none" }}>
-        <button onClick={event => sendShippingOrder(event)}>Accept</button>
+        <button onClick={event => sendShippingOrder(event)}>SHIP</button>
         <button onClick={event => cancelShipping(event)}>Cancel</button>
       </div>
     </div>

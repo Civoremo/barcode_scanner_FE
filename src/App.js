@@ -6,6 +6,7 @@ import Shipping from "./components/shipping";
 import Receiving from "./components/receiving";
 import GenerateQRcode from "./components/generateQRcode";
 import Orders from "./components/orders";
+import Scans from "./components/scans";
 
 function App() {
   return (
@@ -18,11 +19,14 @@ function App() {
         <Link to='/shipping'>Shipping</Link>
         <Link to='/receiving'>Receiving</Link>
       </div>
+      <hr />
+      <br />
       <div>
         <Route path='/generateQR' render={props => <GenerateQRcode />} />
-        <Route path='/orders' render={props => <Orders />} />
+        <Route exact={true} path='/orders' render={props => <Orders />} />
         <Route path='/shipping' render={props => <Shipping />} />
         <Route path='/receiving' render={props => <Receiving />} />
+        <Route path={`/orders/scans/:id`} render={props => <Scans />} />
       </div>
     </div>
   );
