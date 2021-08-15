@@ -39,7 +39,7 @@ const Orders = () => {
           </Link>
           <div style={{ width: "20%" }}>{order.order_number}</div>
           <div style={{ width: "20%" }}>{order.product_id}</div>
-          <div style={{ width: "20%" }}>
+          <div style={{ width: "20%", paddingRight: "50px" }}>
             <a href={order.QRcode}>
               <img src={order.QRcode} alt={order.id + order.order_number} />
             </a>
