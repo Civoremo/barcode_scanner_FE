@@ -4,12 +4,20 @@ import React, { useState } from "react";
 import QRcode from "qrcode";
 
 const GenerateQRcode = () => {
-  const [textForQRgenerate, setTextForQRgenerate] = useState("");
+  const [textForQRgenerate, setTextForQRgenerate] = useState({
+    product: "",
+    created: "",
+    location: "",
+  });
   const [generatedQR, setgeneratedQR] = useState(null);
 
   const generate = e => {
     e.preventDefault();
-    QRcode.toDataURL(textForQRgenerate)
+    //   console.log(textForQRgenerate);
+    let tempArr = [];
+    tempArr.push(textForQRgenerate);
+
+    QRcode.toDataURL(JSON.stringify(tempArr))
       .then(result => {
         console.log("qr result", result);
         setgeneratedQR(result);
@@ -25,17 +33,50 @@ const GenerateQRcode = () => {
       <div>
         <input
           type='text'
-          name='QR text'
-          placeholder='Enter text for QR generation'
-          value={textForQRgenerate}
-          onChange={event => setTextForQRgenerate(event.target.value)}
+          name='product'
+          placeholder='Enter product name'
+          value={textForQRgenerate.product}
+          onChange={event =>
+            setTextForQRgenerate(textForQRgenerate => ({
+              ...textForQRgenerate,
+              [event.target.name]: event.target.value,
+            }))
+          }
+        />
+        <input
+          type='text'
+          name='created'
+          placeholder='Enter creator name'
+          value={textForQRgenerate.created}
+          onChange={event =>
+            setTextForQRgenerate(textForQRgenerate => ({
+              ...textForQRgenerate,
+              [event.target.name]: event.target.value,
+            }))
+          }
+        />
+        <input
+          type='text'
+          name='location'
+          placeholder='Enter location'
+          value={textForQRgenerate.location}
+          onChange={event =>
+            setTextForQRgenerate(textForQRgenerate => ({
+              ...textForQRgenerate,
+              [event.target.name]: event.target.value,
+            }))
+          }
         />
         <button onClick={event => generate(event)}>Generate QR</button>
       </div>
       <br />
       <br />
       <div>
-        {generatedQR ? <img src={generatedQR} alt='generated qr code' /> : null}
+        {generatedQR ? (
+          <a href={generatedQR} download>
+            <img src={generatedQR} alt='generated qr code' />
+          </a>
+        ) : null}
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ const Shipping = () => {
   };
 
   const handleScan = scan => {
-    if (scan) {
+    if (scan && readQRcode === null) {
       //   console.log("scan result", scan);
       setReadQRcode(scan);
     }
@@ -22,27 +22,20 @@ const Shipping = () => {
   return (
     <div>
       <div>shipping scanner component</div>
-      {/* <ReadQR
-        delay={300}
-        width={400}
-        height={400}
-        facingMode={"environment"}
-        stopStream={readQRcode ? true : false}
-        onUpdate={(err, result) => {
-          if (result) setReadQRcode(result);
-          else console.log("not found");
-        }}
-      /> */}
       <QrReader
         // ref={qrReaderRef}
         delay={300}
         style={{ width: "400px", height: "400px" }}
         onError={handleScanError}
         onScan={handleScan}
-        // onLoad={true}
-        // facingMode={"user"}
+        facingMode={"environment"}
+        showViewFinder={true}
       />
       <div>{"Scanned QR: " + readQRcode}</div>
+      <div style={{ display: readQRcode ? "block" : "none" }}>
+        <button>Accept</button>
+        <button>Cancel</button>
+      </div>
     </div>
   );
 };
