@@ -19,6 +19,11 @@ const Shipping = () => {
     }
   };
 
+  const cancelShipping = e => {
+    e.preventDefault();
+    setReadQRcode(null);
+  };
+
   return (
     <div>
       <div>shipping scanner component</div>
@@ -34,7 +39,7 @@ const Shipping = () => {
       <div>{"Scanned QR: " + readQRcode}</div>
       <div style={{ display: readQRcode ? "block" : "none" }}>
         <button>Accept</button>
-        <button>Cancel</button>
+        <button onClick={event => cancelShipping(event)}>Cancel</button>
       </div>
     </div>
   );
