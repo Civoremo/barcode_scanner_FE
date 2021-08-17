@@ -11,18 +11,17 @@ import Scans from "./components/scans";
 function App() {
   return (
     <div>
-      <h3>QR Code Scanner</h3>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <h3>QR Code Scanner</h3>
+      </div>
       <br />
-      <div
-        style={{ display: "flex", flexDirection: "column", flexWrap: "wrap" }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-around" }}>
         {/* <Link to='generateQR'>Generate QR</Link> */}
-        <Link to='/orders' style={{ border: "1px solid red" }}>
-          Orders
-        </Link>
+        <Link to='/orders'>Orders</Link>
         <Link to='/shipping'>Shipping</Link>
         <Link to='/receiving'>Receiving</Link>
       </div>
+      <br />
       <hr />
       <br />
       <div>
