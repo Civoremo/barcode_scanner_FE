@@ -3,7 +3,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import QrReader from "react-qr-reader";
-// import ReadQR from "react-qr-barcode-scanner";
+import Button from "@material-ui/core/Button";
 
 const Shipping = () => {
   const [readQRcode, setReadQRcode] = useState(null);
@@ -45,8 +45,16 @@ const Shipping = () => {
   };
 
   return (
-    <div>
-      <h3>SHIPPING SCANNER</h3>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        background: "#222",
+        paddingBottom: "40px",
+      }}
+    >
+      <h3 style={{ color: "#fff" }}>SHIPPING SCANNER</h3>
       <QrReader
         // ref={qrReaderRef}
         delay={300}
@@ -56,10 +64,60 @@ const Shipping = () => {
         facingMode={"environment"}
         showViewFinder={true}
       />
-      <div>{"Scanned QR: " + readQRcode}</div>
-      <div style={{ display: readQRcode ? "block" : "none" }}>
-        <button onClick={event => sendShippingOrder(event)}>SHIP</button>
-        <button onClick={event => cancelShipping(event)}>Cancel</button>
+      {/* <div>{"Scanned QR: " + readQRcode}</div> */}
+      <div
+        style={{
+          position: "absolute",
+          top: "550px",
+          display: readQRcode ? "flex" : "flex",
+          justifyContent: "space-around",
+          minWidth: "300px",
+          maxWidth: "450px",
+          // border: "1px solid red",
+        }}
+      >
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={event => sendShippingOrder(event)}
+          style={{ width: "150px", height: "50px" }}
+        >
+          SHIP
+        </Button>
+        <Button
+          variant='outlined'
+          color='secondary'
+          onClick={event => cancelShipping(event)}
+        >
+          Cancel
+        </Button>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: "400px",
+          background: "grey",
+          // border: "2px solid green",
+          width: "260px",
+          height: "100px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            minHeight: "80px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+            alignItems: "center",
+            // border: "1px solid red",
+          }}
+        >
+          <div>Processing</div>
+          <div>order info</div>
+        </div>
       </div>
     </div>
   );
