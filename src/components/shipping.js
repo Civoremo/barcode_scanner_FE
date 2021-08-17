@@ -1,31 +1,55 @@
 /** @format */
 
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import QrReader from "react-qr-reader";
-import Button from "@material-ui/core/Button";
+import { Button, Paper, CircularProgress } from "@material-ui/core/";
 
 const Shipping = () => {
   const [readQRcode, setReadQRcode] = useState(null);
+  const [formatedQRinfo, setFormatedQRinfo] = useState(null);
+  const [postStatus, setPostStatus] = useState(false);
+  const [sending, setSending] = useState(false);
+
   //   const qrReaderRef = useRef(null);
 
   const sendShippingOrder = e => {
     e.preventDefault();
+    setSending(true);
+  };
 
-    axios({
-      method: "post",
-      url: `${process.env.REACT_APP_REMOTE_API_URL}QR/shipping`,
-      data: { orderDetails: readQRcode },
-      responseType: "json",
-    })
-      .then(result => {
-        console.log("shipping post result", result);
-        setReadQRcode(null);
+  useEffect(() => {
+    if (sending) {
+      axios({
+        method: "post",
+        url: `${process.env.REACT_APP_REMOTE_API_URL}QR/shipping`,
+        data: { orderDetails: readQRcode },
+        responseType: "json",
       })
-      .catch(err => {
-        console.log("shipping post failed", err);
-        setReadQRcode(null);
-      });
+        .then(result => {
+          console.log("shipping post result", result);
+          if (result.status === 201) {
+            setPostStatus(true);
+            setReadQRcode(null);
+            setSending(false);
+            timerCloseSuccess();
+          } else {
+            setPostStatus(null);
+          }
+        })
+        .catch(err => {
+          console.log("shipping post failed", err);
+          setPostStatus(null);
+          setReadQRcode(null);
+        });
+    }
+  }, [sending]);
+
+  const timerCloseSuccess = () => {
+    setTimeout(() => {
+      setPostStatus(false);
+      setFormatedQRinfo(null);
+    }, 1000);
   };
 
   const handleScanError = error => {
@@ -36,12 +60,14 @@ const Shipping = () => {
     if (scan && readQRcode === null) {
       //   console.log("scan result", scan);
       setReadQRcode(scan);
+      setFormatedQRinfo(JSON.parse(scan));
     }
   };
 
   const cancelShipping = e => {
     e.preventDefault();
     setReadQRcode(null);
+    setFormatedQRinfo(null);
   };
 
   return (
@@ -56,7 +82,6 @@ const Shipping = () => {
     >
       <h3 style={{ color: "#fff" }}>SHIPPING SCANNER</h3>
       <QrReader
-        // ref={qrReaderRef}
         delay={300}
         style={{ width: "400px", height: "400px" }}
         onError={handleScanError}
@@ -64,16 +89,15 @@ const Shipping = () => {
         facingMode={"environment"}
         showViewFinder={true}
       />
-      {/* <div>{"Scanned QR: " + readQRcode}</div> */}
       <div
         style={{
           position: "absolute",
           top: "550px",
-          display: readQRcode ? "flex" : "flex",
+          display: readQRcode ? "flex" : "none",
           justifyContent: "space-around",
           minWidth: "300px",
           maxWidth: "450px",
-          // border: "1px solid red",
+          zIndex: 10,
         }}
       >
         <Button
@@ -92,33 +116,74 @@ const Shipping = () => {
           Cancel
         </Button>
       </div>
-      <div
+      <Paper
         style={{
           position: "absolute",
           top: "400px",
           background: "grey",
-          // border: "2px solid green",
           width: "260px",
           height: "100px",
-          display: "flex",
+          display: formatedQRinfo ? "flex" : "none",
           justifyContent: "center",
           alignItems: "center",
         }}
+        elevation={3}
       >
         <div
           style={{
             minHeight: "80px",
-            display: "flex",
             flexDirection: "column",
             justifyContent: "space-around",
             alignItems: "center",
-            // border: "1px solid red",
           }}
         >
-          <div>Processing</div>
-          <div>order info</div>
+          {postStatus ? (
+            <div
+              style={{
+                color: "lightgreen",
+                fontWeight: "bolder",
+                letterSpacing: "5px",
+                fontSize: "18px",
+                height: "40px",
+              }}
+            >
+              SUCCESS
+            </div>
+          ) : (
+            <div
+              style={{
+                height: "40px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <div style={{ display: sending ? "block" : "none" }}>
+                <CircularProgress style={{ width: "30px", height: "30px" }} />
+              </div>
+            </div>
+          )}
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {/* {readQRcode} */}
+            <div>
+              {formatedQRinfo
+                ? `${formatedQRinfo[1].order_number}-${formatedQRinfo[2].id}`
+                : ""}
+            </div>
+
+            <div>
+              {formatedQRinfo ? `${formatedQRinfo[2].product_name}` : ""}
+            </div>
+          </div>
         </div>
-      </div>
+      </Paper>
     </div>
   );
 };
